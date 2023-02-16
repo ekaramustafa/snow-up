@@ -4,7 +4,7 @@ using UnityEngine;
 
 public class PlayerController : MonoBehaviour
 {
-
+    public bool canMove = true;
     private Rigidbody2D rigidbody;
     [SerializeField] private float torqueAmount = 1f;
     // Start is called before the first frame update
@@ -21,18 +21,20 @@ public class PlayerController : MonoBehaviour
 
     void handleRotation()
     {
-        if (Input.GetKey(KeyCode.LeftArrow))
+        if (canMove)
         {
-            //rotate to left
-            rigidbody.AddTorque(torqueAmount);
-            
-        }
-        else if(Input.GetKey(KeyCode.RightArrow))
-        {
-            //rotate to right
-            rigidbody.AddTorque(-torqueAmount);
-        }
-        
+            if (Input.GetKey(KeyCode.LeftArrow))
+            {
+                //rotate to left
+                rigidbody.AddTorque(torqueAmount);
 
+            }
+            else if (Input.GetKey(KeyCode.RightArrow))
+            {
+                //rotate to right
+                rigidbody.AddTorque(-torqueAmount);
+            }
+
+        }
     }
 }

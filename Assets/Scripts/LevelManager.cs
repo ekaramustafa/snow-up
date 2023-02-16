@@ -9,6 +9,8 @@ public class LevelManager : MonoBehaviour
     [SerializeField] GameObject player;
     Collider2D finishLinecollider;
     Collider2D playerCrashCollider;
+
+    [SerializeField, Range (0f,2f)] float loadDelay = 0.25f;
     // Start is called before the first frame update
     private void Start()
     {
@@ -18,27 +20,26 @@ public class LevelManager : MonoBehaviour
 
     private void Update()
     {
-        isFinished();
+        IsFinished();
         IsCrashed();
+        KeyBindings();
     }
 
     void KeyBindings()
     {
         if (Input.GetKey(KeyCode.R))
         {
-            //restart the game
+            Invoke("ReloadScene",loadDelay);
 
         }
     }
 
-    void isFinished()
+    void IsFinished()
     {
         if (finishLinecollider.IsTouchingLayers())
         {
-            Debug.Log("You finished the level");
-            
             //next level
-            //SceneManager.LoadScene(SceneManager.GetActiveScene().buildIndex+1);
+            Invoke("NextLevel", loadDelay);
         }
     }
 
@@ -46,10 +47,22 @@ public class LevelManager : MonoBehaviour
     {
         if (playerCrashCollider.IsTouchingLayers(LayerMask.GetMask("Environment")))
         {
-            Debug.Log("Bro you crashed");
+            player.GetComponent<Rigidbody2D>().simulated = false;
             //reset the game
-            SceneManager.LoadScene(SceneManager.GetActiveScene().buildIndex);
-        }
+            Invoke("ReloadScene", loadDelay);
+            }
+
+    }
+
+    void ReloadScene()
+    {
+        SceneManager.LoadScene(SceneManager.GetActiveScene().buildIndex);
+        player.GetComponent<Rigidbody2D>().simulated = true;
+    }
+
+    void NextLevel()
+    {
+        SceneManager.LoadScene(SceneManager.GetActiveScene().buildIndex+1);
 
     }
 }
