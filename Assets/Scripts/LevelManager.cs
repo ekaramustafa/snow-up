@@ -7,6 +7,9 @@ public class LevelManager : MonoBehaviour
 {
     [SerializeField] GameObject finishLine;
     [SerializeField] GameObject player;
+    [SerializeField] ParticleSystem finishEffect;
+    [SerializeField] ParticleSystem crashEffect;
+
     Collider2D finishLinecollider;
     Collider2D playerCrashCollider;
 
@@ -39,6 +42,7 @@ public class LevelManager : MonoBehaviour
         if (finishLinecollider.IsTouchingLayers())
         {
             //next level
+            finishEffect.Play();
             Invoke("NextLevel", loadDelay);
         }
     }
@@ -48,6 +52,7 @@ public class LevelManager : MonoBehaviour
         if (playerCrashCollider.IsTouchingLayers(LayerMask.GetMask("Environment")))
         {
             player.GetComponent<Rigidbody2D>().simulated = false;
+            crashEffect.Play();
             //reset the game
             Invoke("ReloadScene", loadDelay);
             }
